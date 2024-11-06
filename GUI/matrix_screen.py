@@ -290,14 +290,15 @@ class Matrix(QWidget):
 
     def solve_matrix(self):
     # Check if both text_field_2 and text_field_3 are empty when they are enabled
-        if self.checkbox_2.isVisible() and self.checkbox_2.isChecked() and not self.text_field_2.text():
+        if self.size_input.value()==0:
+            self.show_error_message("Size of matrix cannot be zero")
+        elif self.checkbox_2.isVisible() and self.checkbox_2.isChecked() and not self.text_field_2.text():
             self.show_error_message("Please fill in the number of iterations.")
             return
         elif self.checkbox_3.isVisible() and self.checkbox_3.isChecked() and not self.text_field_3.text():
             self.show_error_message("Please fill in the absolute relative error.")
             return
-        elif self.size_input.value()==0:
-            self.show_error_message("Size of matrix cannot be zero")
+        
 
         if len(self.matrix_inputs) >= 1:
             callingMethod(arr=self.matrix_inputs, method=self.method, numberEquations=len(self.matrix_inputs), significantFigures=self.sfigures_input.value())

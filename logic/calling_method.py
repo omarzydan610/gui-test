@@ -1,4 +1,4 @@
-from methods.gauss import *
+from methods.method import *
 
 def callingMethod(arr, method, numberEquations, initialGuess=0, significantFigures=1, NumberOfIterations=-1, AbseluteRelativeError=-1):
     matrix_values = []
