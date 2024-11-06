@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QDoubleValidator
+from PyQt6.QtGui import QIntValidator
 from logic.calling_method import callingMethod
 
 class Matrix(QWidget):
@@ -49,6 +50,29 @@ class Matrix(QWidget):
         self.input_layout = QHBoxLayout()
         
 
+        
+        # Input for matrix size
+        self.size_label = QLabel("Enter the size of the matrix (n x n):", self)
+        self.size_label.setStyleSheet("""
+            QLabel {
+                font-size: 16px;
+                margin-bottom: 5px;
+            }
+        """)
+        self.input_layout.addWidget(self.size_label)
+
+        self.size_input = QSpinBox(self)
+        self.size_input.setMinimum(0)
+        self.size_input.setMaximum(9)
+        self.size_input.valueChanged.connect(self.generate_matrix)
+        self.size_input.valueChanged.connect(self.generate_intial_guess)
+        self.size_input.setStyleSheet("""
+            QSpinBox {
+                font-size: 16px;
+            }
+        """)
+        self.input_layout.addWidget(self.size_input)
+        
         # Input for number of significant figures
         self.sfigures_label = QLabel("Number of Significant Figures:", self)
         self.sfigures_label.setStyleSheet("""
@@ -70,26 +94,6 @@ class Matrix(QWidget):
         """)
         self.input_layout.addWidget(self.sfigures_input)
 
-        # Input for matrix size
-        self.size_label = QLabel("Enter the size of the matrix (n x n):", self)
-        self.size_label.setStyleSheet("""
-            QLabel {
-                font-size: 16px;
-                margin-bottom: 5px;
-            }
-        """)
-        self.input_layout.addWidget(self.size_label)
-
-        self.size_input = QSpinBox(self)
-        self.size_input.setMinimum(1)
-        self.size_input.setMaximum(9)
-        self.size_input.valueChanged.connect(self.generate_matrix)
-        self.size_input.setStyleSheet("""
-            QSpinBox {
-                font-size: 16px;
-            }
-        """)
-        self.input_layout.addWidget(self.size_input)
 
         # Add the horizontal layout to the main layout
         self.main_layout.addLayout(self.input_layout)
@@ -115,23 +119,35 @@ class Matrix(QWidget):
         # Add the scroll area to the main layout
         self.main_layout.addWidget(self.scroll_area)
         
+        self.intial_guess_layout=QHBoxLayout()
+        self.intial_guess_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.main_layout.addLayout(self.intial_guess_layout)
         
-            
         self.text_fields_layout = QHBoxLayout()
+        # Second text field with checkbox
         # Second text field with checkbox
         self.checkbox_2 = QCheckBox("Number of iterations", self)
         self.checkbox_2.setStyleSheet("font-size:14px")
         self.checkbox_2.stateChanged.connect(self.toggle_field_2)
         self.text_field_2 = QLineEdit(self)
         self.text_field_2.setStyleSheet("height:15px;font-size:14px;padding:7px 2px")
+        # Integer validator for text_field_2
+        integer_validator = QIntValidator(self)
+        integer_validator.setBottom(0)  # Optionally set a lower limit if necessary
+        self.text_field_2.setValidator(integer_validator)
         self.text_fields_layout.addWidget(self.checkbox_2)
         self.text_fields_layout.addWidget(self.text_field_2)
+
         # Third text field with checkbox
         self.checkbox_3 = QCheckBox("Abselute Relative Error", self)
         self.checkbox_3.setStyleSheet("font-size:14px")
         self.checkbox_3.stateChanged.connect(self.toggle_field_3)
         self.text_field_3 = QLineEdit(self)
         self.text_field_3.setStyleSheet("height:15px;font-size:14px;padding:7px 2px")
+        # Double validator for text_field_3
+        double_validator = QDoubleValidator(self)
+        double_validator.setBottom(0)  # No lower limit
+        self.text_field_3.setValidator(double_validator)
         self.text_fields_layout.addWidget(self.checkbox_3)
         self.text_fields_layout.addWidget(self.text_field_3)
         
@@ -171,10 +187,49 @@ class Matrix(QWidget):
         self.setLayout(self.main_layout)
         self.main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.generate_matrix()
+        self.generate_intial_guess()
+        
+    def generate_intial_guess(self):
+        
+        clear_layout(self.intial_guess_layout)
+        
+        if(not self.text_field_2.isVisible()):
+            return
+        matrix_size = self.size_input.value()
+        
+        for i in range(matrix_size):
+            temp=QVBoxLayout()
+            temp.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            temp2=QLabel(f"X{i+1}")
+            temp2.setStyleSheet("font-size:14px")
+            temp.addWidget(temp2)
+            input_field = QLineEdit("0.0", self)
+            input_field.setStyleSheet("""
+                QLineEdit {
+                    font-size: 14px;
+                    border: 1px solid #ccc;
+                    padding: 5;
+                    margin: 0;
+                    border-radius: 5px;
+                    max-width:60px
+                }
+            """)
+            validator = QDoubleValidator(self)
+            validator.setBottom(-float('inf'))
+            validator.setTop(float('inf'))
+            input_field.setValidator(validator)
+            temp.addWidget(input_field)
+            
+            self.intial_guess_layout.addLayout(temp)
+            
 
     def display_method(self, method):
         self.method = method
-        if(method=="Jacobi" or method=="Gauss Seidel"):
+        self.checkbox_2.setChecked(True)
+        self.size_input.setValue(0)
+        self.sfigures_input.setValue(1)
+        self.label.setText(f"Selected Method: {method}")
+        if((method=="Jacobi" or method=="Gauss Seidel")):
             self.checkbox_2.setVisible(True)
             self.checkbox_3.setVisible(True)
             self.text_field_2.setVisible(True)
@@ -184,12 +239,7 @@ class Matrix(QWidget):
             self.checkbox_3.setVisible(False)
             self.text_field_2.setVisible(False)
             self.text_field_3.setVisible(False)
-            
         
-        self.checkbox_2.setChecked(True)
-        self.size_input.setValue(1)
-        self.sfigures_input.setValue(1)
-        self.label.setText(f"Selected Method: {method}")
 
     def go_back_to_methods(self):
         self.stacked_widget.setCurrentIndex(0)
@@ -239,9 +289,30 @@ class Matrix(QWidget):
             self.matrix_inputs.append(row_inputs)
 
     def solve_matrix(self):
+    # Check if both text_field_2 and text_field_3 are empty when they are enabled
+        if self.checkbox_2.isVisible() and self.checkbox_2.isChecked() and not self.text_field_2.text():
+            self.show_error_message("Please fill in the number of iterations.")
+            return
+        elif self.checkbox_3.isVisible() and self.checkbox_3.isChecked() and not self.text_field_3.text():
+            self.show_error_message("Please fill in the absolute relative error.")
+            return
+        elif self.size_input.value()==0:
+            self.show_error_message("Size of matrix cannot be zero")
+
         if len(self.matrix_inputs) >= 1:
             callingMethod(arr=self.matrix_inputs, method=self.method, numberEquations=len(self.matrix_inputs), significantFigures=self.sfigures_input.value())
             self.stacked_widget.setCurrentIndex(3)
+        
+        
+        
+    def show_error_message(self, message):
+        error_dialog = QMessageBox(self)
+        error_dialog.setIcon(QMessageBox.Icon.Warning)
+        error_dialog.setText(message)
+        error_dialog.setWindowTitle("Input Error")
+        error_dialog.setStyleSheet("font-size:16px")
+        error_dialog.exec()
+    
     def toggle_field_2(self):
         # Enable or disable text_field_2 based on checkbox_2 state
         self.text_field_2.setEnabled(self.checkbox_2.isChecked())
@@ -271,3 +342,4 @@ def clear_layout(layout: QLayout):
         elif item.layout():
             # If the item is a layout, recursively clear it
             clear_layout(item.layout())
+
