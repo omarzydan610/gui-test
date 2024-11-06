@@ -6,7 +6,7 @@ class Methods(QWidget):
     def __init__(self, stacked_widget):
         super().__init__()
         self.stacked_widget = stacked_widget
-
+        
         layout = QVBoxLayout()
 
         label = QLabel("Choose Method")
@@ -38,28 +38,18 @@ class Methods(QWidget):
                 margin: 15px 0;
                 font-size: 40px;
             }
+            QPushButton:hover {
+                background-color: #ddf3fa;
+            }
         """)
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def show_matrix_screen(self, method):
         # Pass the selected method to the second page
-        self.stacked_widget.setCurrentIndex(1)
+        if(method == "LU Decomposition"):
+            self.stacked_widget.setCurrentIndex(1)
+        else:
+            self.stacked_widget.setCurrentIndex(2)
+            self.stacked_widget.currentWidget().display_method(method)
         # Get the second page widget and call its method to display the selected method
-        self.stacked_widget.currentWidget().display_method(method)
-
-
-class MatrixScreen(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.layout = QVBoxLayout()
-        self.label = QLabel("Selected Method: None", self)
-        self.layout.addWidget(self.label)
-        self.setLayout(self.layout)
-
-    def display_method(self, method):
-        self.label.setText(f"Selected Method: {method}")
-
-
-
-
 
