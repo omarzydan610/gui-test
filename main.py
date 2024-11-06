@@ -1,13 +1,11 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QStackedWidget, QPushButton
-
-
-
 from PyQt6.QtWidgets import QWidget, QStackedWidget, QVBoxLayout
 
-from QUI.methods_screen import Methods
-from QUI.matrix_screen import Matrix
-from QUI.LU_screen import LU
+from GUI.methods_screen import Methods
+from GUI.LU_screen import LU
+from GUI.matrix_screen import Matrix
+from GUI.solve_screen import Solve 
 
 
 
@@ -25,11 +23,13 @@ class MainWindow(QWidget):
         self.methods_page = Methods(self.stacked_widget)
         self.LU_page = LU(self.stacked_widget)
         self.matrix_screen_page = Matrix(self.stacked_widget)
+        self.solve_page = Solve(self.stacked_widget)
 
         # Add pages to QStackedWidget
         self.stacked_widget.addWidget(self.methods_page)
         self.stacked_widget.addWidget(self.LU_page)
         self.stacked_widget.addWidget(self.matrix_screen_page)
+        self.stacked_widget.addWidget(self.solve_page)
 
         # Set the layout of the main window
         layout = QVBoxLayout()

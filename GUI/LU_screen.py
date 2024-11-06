@@ -26,9 +26,6 @@ class LU(QWidget):
         # Apply the stylesheet for the entire widget
         self.setStyleSheet("""
             QPushButton {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
                 min-width: 600px;
                 height: 50px;
                 background-color: lightblue;
