@@ -43,31 +43,30 @@ class Solve(QWidget):
 
         # Apply the stylesheet
         self.setStyleSheet("""
-            QWidget {
+            QWidget{
                 background-color: #f0f0f0;
                 font-size: 14px;
                 font-family: Arial, sans-serif;
             }
-            QLabel {
+            QLabel{
                 font-weight: bold;
                 color: #333;
             }
-            QLineEdit {
+            QLineEdit{
                 background-color: #fff;
                 border: 1px solid #ccc;
                 border-radius: 4px;
                 padding: 5px;
             }
-            QPushButton {
+            QPushButton{
                 background-color: #007bff;
-                
                 color: #fff;
                 border: none;
                 border-radius: 4px;
                 padding: 10px 20px;
                 font-size: 14px;
             }
-            QPushButton:hover {
+            QPushButton:hover{
                 background-color: #0056b3;
             }
         """)

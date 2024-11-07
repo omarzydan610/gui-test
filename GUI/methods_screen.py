@@ -10,7 +10,7 @@ class Methods(QWidget):
         layout = QVBoxLayout()
 
         label = QLabel("Choose Method")
-        label.setStyleSheet("font-size:50px; font-weight:bold; color:black; padding-left:100px")
+        label.setStyleSheet("font-size:50px; font-weight:bold; color:#439A97; padding-left:100px")
         layout.addWidget(label)
 
         # Create and connect buttons dynamically in a loop
@@ -28,15 +28,15 @@ class Methods(QWidget):
             QPushButton {
                 min-width: 600px;
                 height: 50px;
-                background-color: lightblue;
-                color: black;
+                background-color: #439A97;
+                color: #F3F7EC;
                 border-radius: 5px;
                 padding: 10px;
                 margin: 15px 0;
                 font-size: 40px;
             }
             QPushButton:hover {
-                background-color: #ddf3fa;
+                background-color: #62B6B7;
             }
         """)
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)

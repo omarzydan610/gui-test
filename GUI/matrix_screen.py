@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QDoubleValidator
+from PyQt6.QtGui import QDoubleValidator,QIcon,QPixmap
 from PyQt6.QtGui import QIntValidator
 from logic.calling_method import callingMethod
 
@@ -16,21 +16,15 @@ class Matrix(QWidget):
         # Top layout for the back button
         self.top_layout = QHBoxLayout()
 
-        back_button = QPushButton("Back to Methods", self)
+        pixmap = QPixmap("images/backIcon.png").scaled(24, 24)  # Resize to 24x24 pixels
+        icon = QIcon(pixmap)
+
+        back_button = QPushButton(self)
+        back_button.setIcon(icon)  # Set the icon
+        back_button.setIconSize(back_button.sizeHint())  # Adjust icon size if needed
+        back_button.setFixedSize(30, 30)
+        back_button.setStyleSheet("border:none")
         back_button.clicked.connect(self.go_back_to_methods)
-        back_button.setStyleSheet("""
-            QPushButton {
-                background-color: lightblue;
-                color: white;
-                border-radius: 10px;
-                padding: 10px 20px;
-                font-size: 16px;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background-color: #ddf3fa;
-            }
-        """)
         self.top_layout.addWidget(back_button, alignment=Qt.AlignmentFlag.AlignLeft)
 
         # Label for the selected method
@@ -63,12 +57,13 @@ class Matrix(QWidget):
 
         self.size_input = QSpinBox(self)
         self.size_input.setMinimum(0)
-        self.size_input.setMaximum(9)
+        self.size_input.setMaximum(10)
         self.size_input.valueChanged.connect(self.generate_matrix)
         self.size_input.valueChanged.connect(self.generate_intial_guess)
         self.size_input.setStyleSheet("""
             QSpinBox {
                 font-size: 16px;
+                background-color:white;
             }
         """)
         self.input_layout.addWidget(self.size_input)
@@ -90,6 +85,7 @@ class Matrix(QWidget):
         self.sfigures_input.setStyleSheet("""
             QSpinBox {
                 font-size: 16px;
+                background-color:white;
             }
         """)
         self.input_layout.addWidget(self.sfigures_input)
@@ -130,7 +126,7 @@ class Matrix(QWidget):
         self.checkbox_2.setStyleSheet("font-size:14px")
         self.checkbox_2.stateChanged.connect(self.toggle_field_2)
         self.text_field_2 = QLineEdit(self)
-        self.text_field_2.setStyleSheet("height:15px;font-size:14px;padding:7px 2px")
+        self.text_field_2.setStyleSheet("height:15px;font-size:14px;padding:7px 2px;background-color:white;")
         # Integer validator for text_field_2
         integer_validator = QIntValidator(self)
         integer_validator.setBottom(0)  # Optionally set a lower limit if necessary
@@ -143,7 +139,7 @@ class Matrix(QWidget):
         self.checkbox_3.setStyleSheet("font-size:14px")
         self.checkbox_3.stateChanged.connect(self.toggle_field_3)
         self.text_field_3 = QLineEdit(self)
-        self.text_field_3.setStyleSheet("height:15px;font-size:14px;padding:7px 2px")
+        self.text_field_3.setStyleSheet("height:15px;font-size:14px;padding:7px 2px;background-color:white;")
         # Double validator for text_field_3
         double_validator = QDoubleValidator(self)
         double_validator.setBottom(0)  # No lower limit
@@ -164,7 +160,7 @@ class Matrix(QWidget):
         self.solve_button = QPushButton("Solve", self)
         self.solve_button.setStyleSheet("""
             QPushButton {
-                background-color: #4CAF50;
+                background-color: #439A97;
                 color: white;
                 border-radius: 10px;
                 padding: 15px 30px;
@@ -211,7 +207,8 @@ class Matrix(QWidget):
                     padding: 5;
                     margin: 0;
                     border-radius: 5px;
-                    max-width:60px
+                    max-width:60px;
+                    background-color:white;
                 }
             """)
             validator = QDoubleValidator(self)
@@ -264,6 +261,7 @@ class Matrix(QWidget):
                         padding: 5;
                         margin: 0;
                         border-radius: 5px;
+                        background-color:white;
                     }
                 """)
                 validator = QDoubleValidator(self)
@@ -311,7 +309,7 @@ class Matrix(QWidget):
         error_dialog.setIcon(QMessageBox.Icon.Warning)
         error_dialog.setText(message)
         error_dialog.setWindowTitle("Input Error")
-        error_dialog.setStyleSheet("font-size:16px")
+        error_dialog.setStyleSheet("font-size:16px;background-color:white")
         error_dialog.exec()
     
     def toggle_field_2(self):

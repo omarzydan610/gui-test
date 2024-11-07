@@ -35,6 +35,7 @@ class MainWindow(QWidget):
         layout = QVBoxLayout()
         layout.addWidget(self.stacked_widget)
         self.setLayout(layout)
+        self.setStyleSheet("background-color:#CBEDD5")
 
 
 if __name__ == "__main__":
